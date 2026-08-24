@@ -1,0 +1,384 @@
+<title>Encontro das Jessicas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,ital@9..144,300..700,0..1&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #fbeee6;
+    --paper-raised: #f6e2d6;
+    --ink: #2b1b2e;
+    --ink-soft: #5a4a58;
+    --muted: #8f7c8a;
+    --accent: #e14f63;
+    --accent-2: #d98a2b;
+    --line: rgba(43, 27, 46, 0.14);
+    --orb-a: #e8637a;
+    --orb-b: #e0a53f;
+    --glow: rgba(225, 79, 99, 0.18);
+    --shadow: rgba(80, 40, 40, 0.16);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1c1526;
+      --paper-raised: #251b31;
+      --ink: #f3e6ec;
+      --ink-soft: #cbb9c6;
+      --muted: #8d7c93;
+      --accent: #f2748a;
+      --accent-2: #f0b25c;
+      --line: rgba(243, 230, 236, 0.14);
+      --orb-a: #f2748a;
+      --orb-b: #f0b25c;
+      --glow: rgba(242, 116, 138, 0.22);
+      --shadow: rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1c1526;
+    --paper-raised: #251b31;
+    --ink: #f3e6ec;
+    --ink-soft: #cbb9c6;
+    --muted: #8d7c93;
+    --accent: #f2748a;
+    --accent-2: #f0b25c;
+    --line: rgba(243, 230, 236, 0.14);
+    --orb-a: #f2748a;
+    --orb-b: #f0b25c;
+    --glow: rgba(242, 116, 138, 0.22);
+    --shadow: rgba(0, 0, 0, 0.4);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Karla", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6vh 1.5rem;
+    position: relative;
+    overflow-x: hidden;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  canvas#sky {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .stage {
+    position: relative;
+    z-index: 1;
+    width: min(640px, 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: clamp(1.6rem, 4vw, 2.4rem);
+  }
+
+  .eyebrow {
+    font-family: "Karla", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+  }
+
+  .eyebrow::before,
+  .eyebrow::after {
+    content: "";
+    width: 2rem;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(1.5rem, 4.6vw, 2.3rem);
+    line-height: 1.25;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  h1 em {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .counter {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: clamp(0.15rem, 1.4vw, 0.4rem);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .days-num {
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(5.5rem, 24vw, 11rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    background: linear-gradient(160deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .days-label {
+    font-family: "Karla", sans-serif;
+    font-weight: 600;
+    font-size: clamp(1rem, 2.6vw, 1.3rem);
+    color: var(--ink-soft);
+    align-self: flex-end;
+    padding-bottom: clamp(0.9rem, 3.2vw, 1.6rem);
+  }
+
+  .subclock {
+    display: flex;
+    gap: clamp(0.7rem, 3vw, 1.4rem);
+  }
+
+  .unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    min-width: 3.6rem;
+    padding: 0.7rem 0.5rem 0.6rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 0.9rem;
+    box-shadow: 0 6px 18px -10px var(--shadow);
+  }
+
+  .unit .n {
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(1.3rem, 3.6vw, 1.7rem);
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .unit .u {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .note {
+    max-width: 30em;
+    font-size: clamp(0.95rem, 2vw, 1.05rem);
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .note strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .date-pill {
+    font-family: "Karla", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.45rem 1.1rem;
+  }
+
+  .arrived {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<main class="stage">
+  <p class="eyebrow">🏠✨ estréia da casa das jéssicas</p>
+
+  <h1>de longe pra <em>perto</em> — contando cada dia até a gente ser casa juntas 💕</h1>
+
+  <div>
+    <div class="counter">
+      <span class="days-num" id="daysNum">–</span>
+      <span class="days-label" id="daysLabel">dias</span>
+    </div>
+    <div class="subclock" role="group" aria-label="horas, minutos e segundos restantes">
+      <div class="unit"><span class="n" id="hoursNum">00</span><span class="u">horas</span></div>
+      <div class="unit"><span class="n" id="minsNum">00</span><span class="u">min</span></div>
+      <div class="unit"><span class="n" id="secsNum">00</span><span class="u">seg</span></div>
+    </div>
+  </div>
+
+  <p class="note" id="noteText">☕ café da manhã juntas, silêncio no sofá, dormir de conchinha, acordar e ver a cara inchada de sono. Faltam só esses dias pra gente se ver 🏡💫</p>
+
+  <p class="date-pill">domingo, 29 de novembro de 2026 · horário de Brasília</p>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // Target: start of Nov 29, 2026, America/Sao_Paulo (UTC-03:00, no DST currently observed).
+  var TARGET = new Date("2026-11-29T00:00:00-03:00").getTime();
+  // Decorative reference window for the closing-distance animation: the "3 meses" mentioned.
+  var WINDOW_MS = 90 * 24 * 60 * 60 * 1000;
+
+  var daysNumEl = document.getElementById("daysNum");
+  var daysLabelEl = document.getElementById("daysLabel");
+  var hoursEl = document.getElementById("hoursNum");
+  var minsEl = document.getElementById("minsNum");
+  var secsEl = document.getElementById("secsNum");
+  var noteEl = document.getElementById("noteText");
+
+  function pad(n) { return String(n).padStart(2, "0"); }
+
+  var progress = 0; // 0 = far apart, 1 = together
+
+  function tick() {
+    var now = Date.now();
+    var diff = TARGET - now;
+
+    if (diff <= 0) {
+      daysNumEl.textContent = "0";
+      daysLabelEl.textContent = "é hoje";
+      hoursEl.textContent = "00";
+      minsEl.textContent = "00";
+      secsEl.textContent = "00";
+      noteEl.innerHTML = "Chegou o dia. <strong>Bem-vinda, Jéssica.</strong>";
+      progress = 1;
+      return;
+    }
+
+    var totalSec = Math.floor(diff / 1000);
+    var days = Math.floor(totalSec / 86400);
+    var hours = Math.floor((totalSec % 86400) / 3600);
+    var mins = Math.floor((totalSec % 3600) / 60);
+    var secs = totalSec % 60;
+
+    daysNumEl.textContent = days;
+    daysLabelEl.textContent = days === 1 ? "dia" : "dias";
+    hoursEl.textContent = pad(hours);
+    minsEl.textContent = pad(mins);
+    secsEl.textContent = pad(secs);
+
+    var elapsed = WINDOW_MS - diff;
+    progress = Math.min(1, Math.max(0, elapsed / WINDOW_MS));
+  }
+
+  tick();
+  setInterval(tick, 1000);
+
+  // --- ambient canvas: two soft glows drifting toward each other as the date nears ---
+  var canvas = document.getElementById("sky");
+  var ctx = canvas.getContext("2d");
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var w, h, t = 0;
+
+  function resize() {
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  function styleColor(varName) {
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  }
+
+  function drawOrb(x, y, r, color) {
+    var grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+    grad.addColorStop(0, color);
+    grad.addColorStop(1, "transparent");
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, w, h);
+
+    var margin = w * 0.16;
+    var gap = (w - margin * 2) * (1 - progress * 0.86);
+    var midX = w / 2;
+    var bob = reduced ? 0 : Math.sin(t / 90) * 8;
+
+    var ax = midX - gap / 2;
+    var bx = midX + gap / 2;
+    var y = h * 0.28 + bob;
+    var r = Math.min(w, h) * 0.32;
+
+    var orbA = styleColor("--orb-a") || "#e8637a";
+    var orbB = styleColor("--orb-b") || "#e0a53f";
+    var glow = styleColor("--glow") || "rgba(225,79,99,0.18)";
+
+    ctx.globalAlpha = 0.9;
+    drawOrb(ax, y, r, hexToRgba(orbA, 0.5));
+    drawOrb(bx, y, r, hexToRgba(orbB, 0.5));
+
+    if (gap < w * 0.22) {
+      ctx.globalAlpha = 1;
+      drawOrb(midX, y, r * 0.7, glow);
+    }
+
+    t += 1;
+    if (!reduced) requestAnimationFrame(frame);
+  }
+
+  function hexToRgba(hex, alpha) {
+    hex = hex.replace("#", "");
+    if (hex.length === 3) {
+      hex = hex.split("").map(function (c) { return c + c; }).join("");
+    }
+    var r = parseInt(hex.substring(0, 2), 16);
+    var g = parseInt(hex.substring(2, 4), 16);
+    var b = parseInt(hex.substring(4, 6), 16);
+    if (isNaN(r) || isNaN(g) || isNaN(b)) return "rgba(225,79,99," + alpha + ")";
+    return "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
+  }
+
+  frame();
+  if (reduced) {
+    // draw a single static frame
+    frame();
+  }
+})();
+</script>
