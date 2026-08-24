@@ -1,8 +1,9 @@
 <title>Encontro das Jessicas</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='16' y='24' font-size='24' text-anchor='middle'%3E%E2%9D%A4%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,ital@9..144,300..700,0..1&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -14,9 +15,10 @@
     --accent: #e14f63;
     --accent-2: #d98a2b;
     --line: rgba(43, 27, 46, 0.14);
-    --orb-a: #e8637a;
-    --orb-b: #e0a53f;
-    --glow: rgba(225, 79, 99, 0.18);
+    --orb-a: #e2334f;
+    --orb-b: #cf8a12;
+    --orb-alpha: 0.78;
+    --glow: rgba(225, 79, 99, 0.3);
     --shadow: rgba(80, 40, 40, 0.16);
   }
 
@@ -32,6 +34,7 @@
       --line: rgba(243, 230, 236, 0.14);
       --orb-a: #f2748a;
       --orb-b: #f0b25c;
+      --orb-alpha: 0.5;
       --glow: rgba(242, 116, 138, 0.22);
       --shadow: rgba(0, 0, 0, 0.4);
     }
@@ -48,6 +51,7 @@
     --line: rgba(243, 230, 236, 0.14);
     --orb-a: #f2748a;
     --orb-b: #f0b25c;
+    --orb-alpha: 0.5;
     --glow: rgba(242, 116, 138, 0.22);
     --shadow: rgba(0, 0, 0, 0.4);
   }
@@ -346,13 +350,14 @@
     var y = h * 0.28 + bob;
     var r = Math.min(w, h) * 0.32;
 
-    var orbA = styleColor("--orb-a") || "#e8637a";
-    var orbB = styleColor("--orb-b") || "#e0a53f";
-    var glow = styleColor("--glow") || "rgba(225,79,99,0.18)";
+    var orbA = styleColor("--orb-a") || "#e2334f";
+    var orbB = styleColor("--orb-b") || "#cf8a12";
+    var glow = styleColor("--glow") || "rgba(225,79,99,0.3)";
+    var orbAlpha = parseFloat(styleColor("--orb-alpha")) || 0.6;
 
     ctx.globalAlpha = 0.9;
-    drawOrb(ax, y, r, hexToRgba(orbA, 0.5));
-    drawOrb(bx, y, r, hexToRgba(orbB, 0.5));
+    drawOrb(ax, y, r, hexToRgba(orbA, orbAlpha));
+    drawOrb(bx, y, r, hexToRgba(orbB, orbAlpha));
 
     if (gap < w * 0.22) {
       ctx.globalAlpha = 1;
