@@ -961,7 +961,7 @@
     </div>
   </div>
 
-  <p class="note" id="noteText">Vamos espalhar nosso amor por mais um mar! Sol na pele, água de coco, mão na mão pela praia. Faltam só esses dias pra gente se encontrar de novo 🌅 🌊 ✈️</p>
+  <p class="note" id="noteText">Vamo espalhar nosso amor por mais uma mar! Sol na pele, água de coco, mão na mão pela praia. Faltam só esses dias pra gente se encontrar de novo 🌅 🌊 ✈️</p>
 
   <p class="date-pill">quarta-feira, 7 de outubro de 2026 · Recife, PE</p>
 </main>
@@ -972,9 +972,10 @@
 
   // Target: start of Oct 7, 2026, America/Sao_Paulo (UTC-03:00, no DST currently observed).
   var TARGET = new Date("2026-10-07T00:00:00-03:00").getTime();
-  // Decorative reference window for the closing-distance animation: from whenever this
-  // page is first opened up to the trip date, so the "approach" always tracks naturally.
-  var WINDOW_MS = Math.max(1, TARGET - Date.now());
+  // Fixed reference window for the closing-distance animation, anchored to the real
+  // date (same approach as the "casinha" countdown) so the distance always reflects
+  // actual days remaining, instead of resetting every time the page is opened.
+  var WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
 
   var daysNumEl = document.getElementById("daysNum");
   var daysLabelEl = document.getElementById("daysLabel");
